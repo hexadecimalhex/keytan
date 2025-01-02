@@ -1,6 +1,7 @@
 use crossterm::event::KeyCode;
 use ratatui::{
     layout::{Margin, Rect},
+    style::Stylize,
     text::Text,
     widgets::{Block, BorderType, Borders},
     Frame,
@@ -78,7 +79,13 @@ impl Login {
             "Password"
         });
         let password_text_rect = Rect::new(form_rect.x, line + 1, form_rect.width, 1);
-        let password_text = Text::from(self.password.clone());
+        let password_text = Text::from(
+            self.password
+                .clone()
+                .chars()
+                .map(|_| '*')
+                .collect::<String>(),
+        );
 
         frame.render_widget(form_frame, form_rect);
         frame.render_widget(instance_label_text, instance_label_rect);
