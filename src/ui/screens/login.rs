@@ -27,8 +27,15 @@ impl Login {
         };
 
         if !text.is_empty() {
-            // TODO: delete it properly. this panics with non-english latin (ç, ã).
-            text.remove(text.len() - 1);
+            let mut chars = text.chars();
+            chars.next_back();
+            let text: String = chars.collect();
+
+            match self.selected {
+                Field::Instance => self.instance = text,
+                Field::Username => self.username = text,
+                Field::Password => self.password = text,
+            }
         }
     }
 
