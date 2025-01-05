@@ -1,7 +1,6 @@
 use crossterm::event::KeyCode;
 use ratatui::{
     layout::{Margin, Rect},
-    style::Stylize,
     text::Text,
     widgets::{Block, BorderType, Borders},
     Frame,

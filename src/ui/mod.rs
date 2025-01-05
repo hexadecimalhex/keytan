@@ -1,8 +1,9 @@
 use crossterm::event::KeyCode;
 use ratatui::DefaultTerminal;
-use screens::{login::Login, Screen};
+use screens::{home::Home, login::Login, Screen};
 
 pub mod screens;
+pub mod widgets;
 
 pub struct Ui {
     /// A handle to `ratatui`'s terminal for rendering.
@@ -39,7 +40,7 @@ impl Default for Ui {
 
         Self {
             terminal,
-            current_screen: Some(Box::new(Login::default())),
+            current_screen: Some(Box::new(Home::default())),
         }
     }
 }
