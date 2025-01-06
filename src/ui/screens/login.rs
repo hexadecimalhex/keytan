@@ -16,7 +16,23 @@ pub struct Login {
     selected: Field,
 }
 
+pub enum Message {
+    /// Selects the next field.
+    NextField,
+    /// Selects the previous field.
+    PrevField,
+    /// Deletes one character in the selected field.
+    Delete,
+}
+
 impl Login {
+    fn message(&mut self, message: Message) {
+        match message {
+            Message::NextField => self.selected = self.selected.next(),
+            Message::PrevField => self.selected = self.selected.prev(),
+            Message::Delete => self.delete_char(),
+        }
+    }
     /// Deletes the last character of the currently selected field.
     /// Does nothing if the field is empty.
     pub fn delete_char(&mut self) {
@@ -97,7 +113,7 @@ impl Login {
 }
 
 impl Screen for Login {
-    fn draw(&self, frame: &mut Frame) {
+    fn view(&self, frame: &mut Frame) {
         let area = frame.area();
         let screen_frame = Block::new()
             .borders(Borders::TOP | Borders::BOTTOM)
@@ -114,13 +130,9 @@ impl Screen for Login {
                 Field::Username => self.username.push(c),
                 Field::Password => self.password.push(c),
             },
-            KeyCode::Backspace => self.delete_char(),
-            KeyCode::Tab => {
-                self.selected = self.selected.next();
-            }
-            KeyCode::BackTab => {
-                self.selected = self.selected.prev();
-            }
+            KeyCode::Backspace => self.message(Message::Delete),
+            KeyCode::Tab => self.message(Message::NextField),
+            KeyCode::BackTab => self.message(Message::PrevField),
             _ => (),
         }
     }

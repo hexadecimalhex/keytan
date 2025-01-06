@@ -25,7 +25,7 @@ impl<'a> Note<'a> {
                 Paragraph::new("[no text]").wrap(Wrap { trim: false }),
                 |text| Paragraph::new(text).wrap(Wrap { trim: false }),
             ),
-            selected: true,
+            selected: false,
         }
     }
 }

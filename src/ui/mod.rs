@@ -1,6 +1,6 @@
 use crossterm::event::KeyCode;
 use ratatui::DefaultTerminal;
-use screens::{home::Home, login::Login, Screen};
+use screens::{home::Home, Screen};
 
 pub mod screens;
 pub mod widgets;
@@ -20,7 +20,7 @@ impl Ui {
         self.terminal
             .draw(|frame| {
                 if let Some(screen) = screen {
-                    screen.draw(frame);
+                    screen.view(frame);
                 }
             })
             .ok();
@@ -40,7 +40,7 @@ impl Default for Ui {
 
         Self {
             terminal,
-            current_screen: Some(Box::new(Home::default())),
+            current_screen: Some(Box::new(Home::make_dummy())),
         }
     }
 }
