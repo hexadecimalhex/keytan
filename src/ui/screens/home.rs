@@ -1,9 +1,15 @@
 use crossterm::event::KeyCode;
-use ratatui::Frame;
+use ratatui::{
+    layout::{self, Constraint, Layout},
+    Frame,
+};
 
-use crate::ui::widgets::notes::{
-    page::{NotePage, NotePageState},
-    Note, User,
+use crate::ui::widgets::{
+    feed_bar::FeedBar,
+    notes::{
+        page::{NotePage, NotePageState},
+        Note, User,
+    },
 };
 
 use super::Screen;
@@ -88,6 +94,13 @@ impl<'a> Home<'a> {
 }
 
 impl Home<'_> {
+    fn layout() -> Layout {
+        Layout::new(
+            layout::Direction::Vertical,
+            [Constraint::Length(4), Constraint::Fill(1)],
+        )
+    }
+
     pub fn make_dummy() -> Self {
         let dummy_author = User {
             name: "John Misskey".into(),
@@ -123,10 +136,13 @@ impl Home<'_> {
 
 impl Screen for Home<'_> {
     fn view(&self, frame: &mut Frame) {
-        let area = frame.area();
+        let layout = Home::layout().split(frame.area());
 
-        if let Some(page) = self.get_selected_page() {
-            frame.render_stateful_widget(page.0.clone(), area, &mut page.1.clone());
+        let (bar, mut bar_state) = FeedBar::new_with_state();
+
+        frame.render_stateful_widget(bar, layout[0], &mut bar_state);
+        if let Some((page, state)) = self.get_selected_page() {
+            frame.render_stateful_widget(page.clone(), layout[1], &mut state.clone());
         }
     }
 
