@@ -302,6 +302,7 @@ version = "0.0.1"
 dependencies = [
  "chrono",
  "crossterm",
+ "parking_lot",
  "ratatui",
  "tui-widget-list",
 ]
