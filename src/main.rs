@@ -18,6 +18,4 @@ fn main() {
     while !app.read().done {
         thread::sleep(Duration::from_millis(100))
     }
-
-    ratatui::restore();
 }

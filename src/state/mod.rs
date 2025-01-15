@@ -14,6 +14,7 @@ impl KeytanState {
         self.ui.handle_key(key);
     }
     pub fn exit(&mut self) {
+        ratatui::restore();
         self.done = true;
     }
 }
