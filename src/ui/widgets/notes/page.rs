@@ -73,7 +73,7 @@ impl<'a> NotePageState<'a> {
     }
     /// Sets the selected item to a given `idx`.
     /// Does nothing if out of bounds.
-    fn select(&mut self, idx: usize) {
+    pub fn select(&mut self, idx: usize) {
         self.selected = Some(idx);
     }
     /// Selects the next note.

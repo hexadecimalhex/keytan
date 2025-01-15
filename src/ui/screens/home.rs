@@ -20,6 +20,8 @@ pub struct Home<'a> {
     pub pages: Vec<(NotePage<'a>, NotePageState<'a>)>,
     /// The index of the currently selected page, if any.
     pub selected_page: Option<usize>,
+    /// Whether to jump down on the next `g` key.
+    pub waiting_start: bool,
 }
 
 pub enum Message {
@@ -27,6 +29,12 @@ pub enum Message {
     SetNote(Direction),
     /// Goes to the next of previous page.
     SetPage(Direction),
+    /// Selects the first note.
+    JumpToStart,
+    /// Selects the last note.
+    JumpToEnd,
+    /// Signals to select the last note when `g` is pressed again.
+    WaitStart,
 }
 
 pub enum Direction {
@@ -37,13 +45,37 @@ pub enum Direction {
 impl<'a> Home<'a> {
     fn message(&mut self, message: Message) {
         match message {
-            Message::SetNote(Direction::Next) => self.next_selected(),
-            Message::SetNote(Direction::Previous) => self.prev_selected(),
+            Message::SetNote(Direction::Next) => {
+                self.next_selected();
+                self.waiting_start = false;
+            }
+            Message::SetNote(Direction::Previous) => {
+                self.prev_selected();
+                self.waiting_start = false;
+            }
             Message::SetPage(Direction::Next) => self.next_page(),
             Message::SetPage(Direction::Previous) => self.prev_page(),
+            Message::JumpToStart => {
+                if let Some((_, state)) = self.get_selected_page_mut() {
+                    state.select(0);
+                }
+            }
+            Message::JumpToEnd => {
+                if let Some((_, state)) = self.get_selected_page_mut() {
+                    if !state.notes.is_empty() {
+                        state.select(state.notes.len() - 1)
+                    }
+                }
+            }
+            Message::WaitStart => self.waiting_start = true,
         }
     }
-    /// Gets the currently selected page, if any.
+    // TODO: separate note feed into a widget.
+    /// Gets a mutable reference to the currently selected page, if any.
+    pub fn get_selected_page_mut(&mut self) -> Option<&mut (NotePage<'a>, NotePageState<'a>)> {
+        self.pages.get_mut(self.selected_page?)
+    }
+    /// Gets a reference to the currently selected page, if any.
     pub fn get_selected_page(&self) -> Option<&(NotePage<'a>, NotePageState<'a>)> {
         self.pages.get(self.selected_page?)
     }
@@ -107,6 +139,7 @@ impl Home<'_> {
             username: "johnmisskey@misskey.io".into(),
         };
         Self {
+            waiting_start: false,
             selected_page: Some(0),
             pages: vec![
                 (NotePage::default(), NotePageState::new(
@@ -152,6 +185,14 @@ impl Screen for Home<'_> {
             KeyCode::Char('k') => self.message(Message::SetNote(Direction::Previous)),
             KeyCode::Char('J') => self.message(Message::SetPage(Direction::Next)),
             KeyCode::Char('K') => self.message(Message::SetPage(Direction::Previous)),
+            KeyCode::Char('G') => self.message(Message::JumpToStart),
+            KeyCode::Char('g') => {
+                if self.waiting_start {
+                    self.message(Message::JumpToEnd);
+                } else {
+                    self.message(Message::WaitStart);
+                }
+            }
             _ => (),
         }
     }

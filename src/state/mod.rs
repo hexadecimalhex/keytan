@@ -1,5 +1,3 @@
-use std::process;
-
 use crossterm::event::KeyCode;
 
 use crate::ui::Ui;
@@ -7,16 +5,15 @@ use crate::ui::Ui;
 #[derive(Default)]
 pub struct KeytanState {
     pub ui: Ui,
+    pub done: bool,
 }
 
 impl KeytanState {
     // TODO: handle key up and other events for flexibility.
-    pub fn handle_key(&mut self, key: KeyCode) {
-        if key == KeyCode::Esc {
-            ratatui::restore();
-            process::exit(0);
-        }
-
+    pub fn handle_input(&mut self, key: KeyCode) {
         self.ui.handle_key(key);
+    }
+    pub fn exit(&mut self) {
+        self.done = true;
     }
 }
