@@ -65,6 +65,7 @@ impl<'a> Home<'a> {
                     if !state.notes.is_empty() {
                         state.select(state.notes.len() - 1)
                     }
+                    self.waiting_start = false;
                 }
             }
             Message::WaitStart => self.waiting_start = true,
