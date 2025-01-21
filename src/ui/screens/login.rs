@@ -113,7 +113,7 @@ impl Login {
 }
 
 impl Screen for Login {
-    fn view(&self, frame: &mut Frame) {
+    fn view(&mut self, frame: &mut Frame) {
         let area = frame.area();
         let screen_frame = Block::new()
             .borders(Borders::TOP | Borders::BOTTOM)

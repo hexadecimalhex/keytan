@@ -3,7 +3,7 @@ use std::{sync::Arc, thread};
 use crossterm::event::KeyCode;
 use parking_lot::RwLock;
 use ratatui::DefaultTerminal;
-use screens::{home::Home, Screen};
+use screens::{home::Home, login::Login, Screen};
 
 pub mod screens;
 pub mod widgets;
@@ -27,7 +27,7 @@ impl Ui {
                 .write()
                 .draw(|frame| {
                     if let Some(screen) = screen {
-                        screen.read().view(frame);
+                        screen.write().view(frame);
                     }
                 })
                 .ok();
@@ -49,6 +49,7 @@ impl Default for Ui {
         Self {
             terminal,
             current_screen: Some(Arc::new(RwLock::new(Box::new(Home::make_dummy())))),
+            // current_screen: Some(Arc::new(RwLock::new(Box::new(Login::default())))),
         }
     }
 }
