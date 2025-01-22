@@ -6,21 +6,21 @@ use ratatui::{
 };
 
 /// A horizontal bar with some information.
-pub struct FeedBar;
+pub struct FeedHeader;
 
-impl FeedBar {
-    pub fn new_with_state() -> (Self, FeedBarState) {
+impl FeedHeader {
+    pub fn new_with_state() -> (Self, FeedHeaderState) {
         (
             Self,
-            FeedBarState {
+            FeedHeaderState {
                 notification_count: 0,
             },
         )
     }
 }
 
-impl StatefulWidget for FeedBar {
-    type State = FeedBarState;
+impl StatefulWidget for FeedHeader {
+    type State = FeedHeaderState;
 
     fn render(self, area: Rect, buf: &mut Buffer, state: &mut Self::State) {
         if area.height < 4 {
@@ -42,11 +42,11 @@ impl StatefulWidget for FeedBar {
     }
 }
 
-pub struct FeedBarState {
+pub struct FeedHeaderState {
     notification_count: usize,
 }
 
-impl FeedBarState {
+impl FeedHeaderState {
     pub fn get_status_text(&self) -> String {
         format!("{} notifications", self.notification_count)
     }

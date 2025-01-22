@@ -3,7 +3,7 @@ use std::marker::PhantomData;
 use ratatui::{buffer::Buffer, layout::Rect, widgets::StatefulWidget};
 use tui_widget_list::{ListBuilder, ListState, ListView};
 
-use super::Note;
+use super::note::Note;
 
 /// A scrollable list of notes.
 #[derive(Default, Clone)]

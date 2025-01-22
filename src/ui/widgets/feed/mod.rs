@@ -1,14 +1,17 @@
+pub mod note;
+pub mod page;
+pub mod header;
+
 use std::marker::PhantomData;
 
+use header::FeedHeader;
 use ratatui::{
     buffer::Buffer,
     layout::{Constraint, Direction, Layout, Rect},
     widgets::StatefulWidget,
 };
 
-use crate::ui::widgets::feed_bar::FeedBar;
-
-use super::page::{NotePage, NotePageState};
+use page::{NotePage, NotePageState};
 
 /// A generic, paginated feed of notes.
 #[derive(Default, Clone)]
@@ -38,7 +41,7 @@ impl<'a> StatefulWidget for NoteFeed<'a> {
     fn render(self, area: Rect, buf: &mut Buffer, state: &mut Self::State) {
         let layout = Self::layout().split(area);
 
-        let (bar, mut bar_state) = FeedBar::new_with_state();
+        let (bar, mut bar_state) = FeedHeader::new_with_state();
         bar.render(layout[0], buf, &mut bar_state);
         if let Some((page, page_state)) = state.get_selected_page() {
             page.clone().render(layout[1], buf, &mut page_state.clone());

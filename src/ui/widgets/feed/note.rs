@@ -3,9 +3,6 @@ use ratatui::layout::{Margin, Rect};
 use ratatui::text::Line;
 use ratatui::widgets::{Block, BorderType, Borders, Paragraph, Widget, Wrap};
 
-pub mod feed;
-pub mod page;
-
 #[derive(Clone)]
 pub struct Note<'a> {
     pub author: User,

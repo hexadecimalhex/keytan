@@ -1,10 +1,10 @@
 use crossterm::event::KeyCode;
 use ratatui::Frame;
 
-use crate::ui::widgets::notes::{
-    feed::{NoteFeed, NoteFeedState},
+use crate::ui::widgets::feed::{
+    note::{Note, User},
     page::{NotePage, NotePageState},
-    Note, User,
+    NoteFeed, NoteFeedState,
 };
 
 use super::Screen;
